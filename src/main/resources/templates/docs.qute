@@ -1,0 +1,33 @@
+{#if container.isGenerateVersion}
+=== Versions
+
+include::{container.project.artifactId}-version.adoc[opts=optional]
+{/if}
+
+{#if container.isGenerateProperties}
+=== Default properties
+
+.src/main/resources/application.properties
+[%collapsible%open]
+====
+include::{container.project.artifactId}-properties.adoc[opts=optional]
+====
+{/if}
+
+{#if container.isGenerateExtensions}
+=== Extensions
+
+include::{container.project.artifactId}-extensions.adoc[opts=optional]
+{/if}
+
+{#if container.isGenerateDocker}
+=== Container
+
+include::{container.project.artifactId}-docker.adoc[opts=optional]
+{/if}
+
+{#if container.isGenerateHelm}
+=== Helm
+
+include::{container.project.artifactId}-helm.adoc[opts=optional]
+{/if}

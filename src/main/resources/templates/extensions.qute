@@ -1,0 +1,27 @@
+
+[.extension.table.searchable, cols="50,.^15,.^15,.^20"]
+|===
+h| Extensions
+h| Documentation
+h| Configuration
+h| Version
+
+{#for extension in container.extensions}
+| {extension.dependency.artifactId}
+
+| {#if extension.isDocUrl}{extension.docUrl}[Link]{/if}
+| {#if extension.isConfigUrl}{extension.configUrl}[Link]{/if}
+| {extension.dependency.version}
+
+{/for}
+
+{#for extension in container.unknowns}
+| {extension.dependency.artifactId}
+
+| {#if extension.isDocUrl}{extension.docUrl}[Link]{/if}
+| {#if extension.isConfigUrl}{extension.configUrl}[Link]{/if}
+| {extension.dependency.version}
+
+{/for}
+
+|===

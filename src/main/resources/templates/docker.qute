@@ -1,0 +1,14 @@
+
+{#if container.version.isLastReleaseVersion}
+.latest release version
+[source,shell,subs=attributes+]
+----
+docker pull {container.registry}{container.project.artifactId}:{container.version.lastReleaseVersion}
+----
+{/if}
+
+.last build version
+[source,shell,subs=attributes+]
+----
+docker pull {container.registry}{container.project.artifactId}:{container.version.lastRcVersion}
+----

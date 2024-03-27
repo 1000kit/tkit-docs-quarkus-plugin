@@ -1,0 +1,10 @@
+== {container.project.name}
+
+include::{container.getIncludeFile}[opts=optional]
+
+{#if container.isConfigFile}
+=== Configuration
+include::{container.configFile}[opts=optional]
+{/if}
+
+include::{container.project.artifactId}-docs.adoc[opts=optional]

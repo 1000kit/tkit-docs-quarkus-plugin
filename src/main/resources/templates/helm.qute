@@ -1,0 +1,22 @@
+
+{#if container.version.isLastReleaseVersion}
+.latest release version
+[source,shell,subs=attributes+]
+----
+helm install {container.project.artifactId} {container.registry}{container.project.artifactId} -- version {container.version.lastReleaseVersion}
+----
+{/if}
+
+.last build version
+[source,shell,subs=attributes+]
+----
+helm install {container.project.artifactId} {container.registry}{container.project.artifactId} -- version {container.version.lastRcVersion}
+----
+
+Default values
+
+.values.yaml
+[source,yaml]
+----
+{container.values}
+----
