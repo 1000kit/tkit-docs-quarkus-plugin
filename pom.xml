@@ -58,7 +58,7 @@
         <maven.maven-core.version>3.9.6</maven.maven-core.version>
 
         <!-- other -->
-        <quarkus.version>3.8.3</quarkus.version>
+        <quarkus.version>3.9.1</quarkus.version>
         <git-commit-id-plugin-core.version>6.0.0-rc.8</git-commit-id-plugin-core.version>
     </properties>
 
