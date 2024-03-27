@@ -1,4 +1,4 @@
-# tkit-liquibase-plugin
+# tkit-docs-quarkus-plugin
 
 1000kit maven plugin to generated documentation for quarkus project.
 
@@ -8,9 +8,7 @@
 
 ### Maven configuration
 
-### Generate database diff
-
-Create a profile in your maven project.
+Create a documentation in your maven project.
 ```xml
  <profile>
     <id>docs</id>
@@ -34,50 +32,3 @@ Create a profile in your maven project.
     </build>
 </profile>
 ```
-
-Run maven command in the project directory:
-```shell script
-mvn clean compile -Pdb-diff
-```
-The result of the execution will be in the `target/liquibase-diff-changeLog.xml` file.
-
-### Check liquibase changes
-
-Create a profile in your maven project.
-```xml
- <profile>
-    <id>db-check</id>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.tkit.maven</groupId>
-                <artifactId>tkit-liquibase-plugin</artifactId>
-                <version>latest-version</version>
-                <executions>
-                    <execution>
-                        <id>default</id>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <phase>validate</phase>
-                        <configuration>
-                            <skipChanges>
-                                <dropTable>table1,table2</dropTable>
-                                <createTable>newTable</createTable>
-                            </skipChanges>
-                        </configuration>                        
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-</profile>
-```
-
-After you run `db-diff` run maven command in the project directory:
-```shell script
-mvn clean compile -Pdb-diff
-mvn clean compile -Pdb-check
-```
-Check command will validate `target/liquibase-diff-changeLog.xml` file.
-
