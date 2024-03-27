@@ -13,20 +13,20 @@
 Create a profile in your maven project.
 ```xml
  <profile>
-    <id>db-diff</id>
+    <id>docs</id>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.tkit.maven</groupId>
-                <artifactId>tkit-liquibase-plugin</artifactId>
+                <artifactId>tkit-docs-quarkus-plugin</artifactId>
                 <version>latest-version</version>
                 <executions>
                     <execution>
                         <id>default</id>
                         <goals>
-                            <goal>diff</goal>
+                            <goal>docs</goal>
                         </goals>
-                        <phase>compile</phase>
+                        <phase>prepare-package</phase>
                     </execution>
                 </executions>
             </plugin>

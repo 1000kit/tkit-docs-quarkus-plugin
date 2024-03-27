@@ -26,7 +26,7 @@ import java.util.*;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
-@Mojo(name = "docs", defaultPhase = LifecyclePhase.VALIDATE, threadSafe = true, requiresDependencyResolution = ResolutionScope.COMPILE)
+@Mojo(name = "docs", defaultPhase = LifecyclePhase.PREPARE_PACKAGE, threadSafe = true, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class DocumentationMojo extends AbstractDocsMojo {
 
     private static final String TEMPLATE_CONTAINER = "container";
