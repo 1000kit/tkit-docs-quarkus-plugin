@@ -96,6 +96,11 @@ public class DocumentationMojo extends AbstractDocsMojo {
             return;
         }
 
+        if ("pom".equals(getProject().getPackaging())) {
+            getLog().debug("tkit quarkus documentation plugin is disabled for pom packaging");
+            return;
+        }
+
         var engine = EngineFactory.createEngine();
 
         var docsContainer = DocsContainer.create(getProject(), generateVersion, generateProperties, generateExtensions, generateDocker, generateHelm);
