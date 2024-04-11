@@ -14,6 +14,7 @@ public class Mapping {
     private static final Map<String, Pattern> PATTERN_MAP = new HashMap<>();
 
     private static final String SUFFIX_GROUP_VERSION = ".version.pattern";
+    private static final String SUFFIX_GROUP_FIX_VERSION = ".version.fix";
     private static final String SUFFIX_DOC_LINK = ".doc.url";
     private static final String SUFFIX_CONFIG_LINK = ".config.url";
 
@@ -52,6 +53,7 @@ public class Mapping {
     private String getId(Dependency dep) {
         return dep.getGroupId() + "." + dep.getArtifactId();
     }
+
     private String createLink(Dependency dep, String keySuffix, String version) {
         var id = getId(dep);
         var url = properties.getProperty(id + keySuffix);
@@ -68,6 +70,11 @@ public class Mapping {
 
     public String getVersion(Dependency dep) {
         var version = dep.getVersion();
+
+        var fix = properties.getProperty(dep.getGroupId() + SUFFIX_GROUP_FIX_VERSION);
+        if (fix != null) {
+            return fix;
+        }
 
         // check existing pattern for groupId
         Pattern pattern = PATTERN_MAP.get(dep.getGroupId());
