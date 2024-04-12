@@ -1,0 +1,2 @@
+:project-rc-version: {container.lastRcVersion}
+:project-version: {container.lastReleaseVersion}
