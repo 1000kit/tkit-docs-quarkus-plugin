@@ -16,6 +16,8 @@ public class VersionContainer {
 
     private Properties properties;
 
+    private MavenProject project;
+
     public String getLastRcVersion() {
         return lastRcVersion;
     }
@@ -30,6 +32,10 @@ public class VersionContainer {
 
     public Properties getProperties() {
         return properties;
+    }
+
+    public MavenProject getProject() {
+        return project;
     }
 
     public static VersionContainer create(MavenProject project, String rcTemplate, String releaseTemplate) {
@@ -57,6 +63,7 @@ public class VersionContainer {
         v.lastReleaseVersion = lastTag;
         v.lastRcVersion = rcVersion;
         v.properties = properties;
+        v.project = project;
         return v;
     }
 

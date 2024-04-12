@@ -1,14 +1,16 @@
 
+include::{container.project.artifactId}-attributes.adoc[opts=optional]
+
 {#if container.version.isLastReleaseVersion}
 .latest release version
 [source,shell,subs=attributes+]
 ----
-docker pull {container.registry}{container.project.artifactId}:{container.version.lastReleaseVersion}
+docker pull {container.registry}{container.project.artifactId}:\{project-version}
 ----
 {/if}
 
 .last build version
 [source,shell,subs=attributes+]
 ----
-docker pull {container.registry}{container.project.artifactId}:{container.version.lastRcVersion}
+docker pull {container.registry}{container.project.artifactId}:\{project-rc-version}
 ----

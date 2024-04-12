@@ -106,6 +106,9 @@ public class DocumentationMojo extends AbstractDocsMojo {
         var docsContainer = DocsContainer.create(getProject(), generateVersion, generateProperties, generateExtensions, generateDocker, generateHelm);
 
         var containerVersion = VersionContainer.create(getProject(), "0.0.0-rc.%s", "%s-rc.%s");
+
+        renderTemplate(engine, containerVersion, "attributes.qute", "-attributes.adoc");
+
         if (docsContainer.isGenerateVersion()) {
             renderTemplate(engine, containerVersion, "version.qute", "-version.adoc");
         }
