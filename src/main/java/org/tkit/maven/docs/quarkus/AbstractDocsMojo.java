@@ -23,7 +23,7 @@ public abstract class AbstractDocsMojo extends AbstractMojo {
     /**
      * The output file
      */
-    @Parameter(name = "outputDir", property = "docs.outputDir", defaultValue = "${project.build.directory}/asciidoc/generated/config")
+    @Parameter(name = "outputDir", property = "docs.outputDir", defaultValue = "docs/modules/${project.artifactId}/pages/")
     protected String outputDir;
 
     protected void writeToFile(String data, String file) throws MojoExecutionException {

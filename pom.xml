@@ -59,7 +59,6 @@
 
         <!-- other -->
         <quarkus.version>3.9.3</quarkus.version>
-        <git-commit-id-plugin-core.version>6.0.0-rc.8</git-commit-id-plugin-core.version>
     </properties>
 
 
@@ -86,11 +85,6 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-qute</artifactId>
             <version>${quarkus.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.git-commit-id</groupId>
-            <artifactId>git-commit-id-plugin-core</artifactId>
-            <version>${git-commit-id-plugin-core.version}</version>
         </dependency>
     </dependencies>
 

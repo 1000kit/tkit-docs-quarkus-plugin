@@ -5,14 +5,14 @@ include::{container.project.artifactId}-attributes.adoc[opts=optional]
 .latest release version
 [source,shell,subs=attributes+]
 ----
-helm install {container.project.artifactId} {container.registry}{container.project.artifactId} -- version \{project-version}
+helm install {container.project.artifactId} {container.registry}{container.project.artifactId} --version \{project-version}
 ----
 {/if}
 
 .last build version
 [source,shell,subs=attributes+]
 ----
-helm install {container.project.artifactId} {container.registry}{container.project.artifactId} -- version \{project-rc-version}
+helm install {container.project.artifactId} {container.registry}{container.project.artifactId} --version \{project-rc-version}
 ----
 
 Default values
