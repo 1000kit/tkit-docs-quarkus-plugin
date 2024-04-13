@@ -1,33 +1,43 @@
-{#if container.isGenerateVersion}
-=== Versions
 
-include::{container.project.artifactId}-version.adoc[opts=optional]
-{/if}
+include::{container.config.attributesFile}[opts=optional]
 
-{#if container.isGenerateProperties}
+{#if container.config.isProperties}
 === Default properties
 
-.src/main/resources/application.properties
+.\{properties-file}
 [%collapsible%open]
 ====
-include::{container.project.artifactId}-properties.adoc[opts=optional]
+[source,properties,subs=attributes+]
+----
+{container.properties.content}
+----
 ====
 {/if}
 
-{#if container.isGenerateExtensions}
+{#if container.config.isExtensions}
 === Extensions
 
-include::{container.project.artifactId}-extensions.adoc[opts=optional]
+include::{container.config.extensionsFile}[opts=optional]
 {/if}
 
-{#if container.isGenerateDocker}
+{#if container.config.isDocker}
 === Container
 
-include::{container.project.artifactId}-docker.adoc[opts=optional]
+\{docker-registry}[Docker registry]
+
 {/if}
 
-{#if container.isGenerateHelm}
+{#if container.config.isHelm}
 === Helm
 
-include::{container.project.artifactId}-helm.adoc[opts=optional]
+\{helm-registry}[Helm registry]
+
+Default values
+
+.\{helm-file}
+[source,yaml]
+----
+{container.helm.values}
+----
+
 {/if}

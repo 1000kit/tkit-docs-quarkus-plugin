@@ -31,11 +31,6 @@ public abstract class AbstractDocsMojo extends AbstractMojo {
         writeTo(out1, data);
     }
 
-    protected void writeToSuffixFile(String data, String fileSuffix) throws MojoExecutionException {
-        Path out1 = getOutputFileSuffix(fileSuffix);
-        writeTo(out1, data);
-    }
-
     protected void writeTo(Path out1, String data) throws MojoExecutionException {
         try {
             Files.writeString(out1, data,  StandardOpenOption.CREATE);
@@ -48,10 +43,6 @@ public abstract class AbstractDocsMojo extends AbstractMojo {
 
     protected MavenProject getProject() {
         return currentProject;
-    }
-
-    protected Path getOutputFileSuffix(String suffix) {
-        return getOutputFile(currentProject.getArtifactId() + suffix);
     }
 
     protected Path getOutputFile(String name) {

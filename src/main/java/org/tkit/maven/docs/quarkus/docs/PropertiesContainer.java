@@ -1,10 +1,7 @@
-package org.tkit.maven.docs.quarkus.properties;
-
-import org.apache.maven.plugin.MojoExecutionException;
+package org.tkit.maven.docs.quarkus.docs;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PropertiesContainer {
@@ -12,12 +9,12 @@ public class PropertiesContainer {
     private final List<String> properties;
 
 
-    public static PropertiesContainer createContainer(String fileName) throws MojoExecutionException {
+    public static PropertiesContainer create(String propertiesFile) {
         List<String> lines;
         try {
-            lines = Files.readAllLines(Paths.get(fileName));
+            lines = Files.readAllLines(Paths.get(propertiesFile));
         } catch (Exception ex) {
-            throw new MojoExecutionException(ex);
+            throw new RuntimeException(ex);
         }
         return new PropertiesContainer(filter(lines));
     }
@@ -26,7 +23,7 @@ public class PropertiesContainer {
         this.properties = properties;
     }
 
-    private static List<String> filter(List<String> lines) throws MojoExecutionException {
+    private static List<String> filter(List<String> lines) {
         return lines.stream().filter(line -> {
             var tmp = line.trim();
 

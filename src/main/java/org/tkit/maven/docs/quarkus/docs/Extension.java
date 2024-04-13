@@ -1,4 +1,4 @@
-package org.tkit.maven.docs.quarkus.extensions;
+package org.tkit.maven.docs.quarkus.docs;
 
 import org.apache.maven.model.Dependency;
 

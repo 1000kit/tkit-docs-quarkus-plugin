@@ -1,10 +1,16 @@
+include::{container.config.attributesFile}[opts=optional]
+
 == {container.project.name}
 
-include::{container.getIncludeFile}[opts=optional]
-
-{#if container.isConfigFile}
-=== Configuration
-include::{container.configFile}[opts=optional]
+{#if container.config.indexHeader}
+include::{container.config.indexHeaderFile}[opts=optional]
 {/if}
 
-include::{container.project.artifactId}-docs.adoc[opts=optional]
+{#if container.config.indexConfig}
+=== Configuration
+include::{container.config.indexConfigFile}[opts=optional]
+{/if}
+
+{#if container.config.indexDocs}
+include::{container.config.indexDocsFile}[opts=optional]
+{/if}
