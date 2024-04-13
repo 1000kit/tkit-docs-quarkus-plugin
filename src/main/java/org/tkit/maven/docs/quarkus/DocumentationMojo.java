@@ -1,22 +1,15 @@
 package org.tkit.maven.docs.quarkus;
 
 import io.quarkus.qute.*;
-import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.tkit.maven.docs.quarkus.docker.DockerContainer;
-import org.tkit.maven.docs.quarkus.extensions.Extension;
-import org.tkit.maven.docs.quarkus.extensions.ExtensionContainer;
-import org.tkit.maven.docs.quarkus.docs.DocsContainer;
-import org.tkit.maven.docs.quarkus.helm.HelmContainer;
-import org.tkit.maven.docs.quarkus.index.IndexContainer;
-import org.tkit.maven.docs.quarkus.mapping.Mapping;
-import org.tkit.maven.docs.quarkus.properties.PropertiesContainer;
+import org.apache.maven.project.MavenProject;
+import org.tkit.maven.docs.quarkus.docs.Configuration;
+import org.tkit.maven.docs.quarkus.docs.Container;
 import org.tkit.maven.docs.quarkus.qute.EngineFactory;
-import org.tkit.maven.docs.quarkus.version.VersionContainer;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -34,202 +27,176 @@ public class DocumentationMojo extends AbstractDocsMojo {
     @Parameter(name = "skipDocs", property = "tkit.docs.skipDocs", defaultValue = "false")
     protected boolean skipDocs;
 
-    @Parameter(name = "includeGroups", property = "tkit.docs.includeGroups", defaultValue = "io.quarkus,org.tkit.quarkus,io.quarkiverse,org.tkit.onecx")
-    private List<String> includeGroups;
+    @Parameter(name = "excludePackages", property = "tkit.docs.excludePackages", defaultValue = "pom")
+    private List<String> excludePackages;
 
-    @Parameter(name = "excludeScopes", property = "tkit.docs.excludeScopes", defaultValue = "test,provided")
-    private List<String> excludeScopes;
+    @Parameter(name = "dependenciesIncludeGroups", property = "tkit.docs.dependencies.includeGroups", defaultValue = "io.quarkus,org.tkit.quarkus,io.quarkiverse,org.tkit.onecx")
+    private List<String> dependenciesIncludeGroups;
 
-    @Parameter(name = "mappingFile", property = "tkit.docs.mappingFile", defaultValue = "extensions-mapping.properties")
-    private String mappingFile;
+    @Parameter(name = "dependenciesExcludeScopes", property = "tkit.docs.dependencies.excludeScopes", defaultValue = "test,provided")
+    private List<String> dependenciesExcludeScopes;
 
-    @Parameter(name = "propertiesFile", property = "tkit.docs.propertiesFile", defaultValue = "src/main/resources/application.properties")
+    @Parameter(name = "dependenciesMappingFile", property = "tkit.docs.dependencies.mappingFile", defaultValue = "extensions-mapping.properties")
+    private String dependenciesMappingFile;
+
+    @Parameter(name = "propertiesFile", property = "tkit.docs.file.properties", defaultValue = "src/main/resources/application.properties")
     protected String propertiesFile;
 
-    @Parameter(name = "generateVersion", property = "tkit.docs.generateVersion", defaultValue = "true")
-    protected boolean generateVersion;
-
-    @Parameter(name = "generateExtensions", property = "tkit.docs.generateExtensions", defaultValue = "true")
-    protected boolean generateExtensions;
-
-    @Parameter(name = "generateProperties", property = "tkit.docs.generateProperties", defaultValue = "true")
-    protected boolean generateProperties;
-
-    @Parameter(name = "generateHelm", property = "tkit.docs.generateHelm", defaultValue = "true")
-    protected boolean generateHelm;
-
-    @Parameter(name = "generateDocker", property = "tkit.docs.generateDocker", defaultValue = "true")
-    protected boolean generateDocker;
-
-    @Parameter(name = "generateDocs", property = "tkit.docs.generateDocs", defaultValue = "true")
-    protected boolean generateDocs;
-
-    @Parameter(name = "generateIndex", property = "tkit.docs.generateIndex", defaultValue = "true")
-    protected boolean generateIndex;
-
-    @Parameter(name = "dockerRegistry", property = "tkit.docs.dockerRegistry", defaultValue = "ghcr.io/onecx/")
-    protected String dockerRegistry;
-
-    @Parameter(name = "helmRegistry", property = "tkit.docs.helmRegistry", defaultValue = "oci://ghcr.io/onecx/charts/")
-    protected String helmRegistry;
-
-    @Parameter(name = "helmValuesFile", property = "tkit.docs.helmValuesFile", defaultValue = "src/main/helm/values.yaml")
+    @Parameter(name = "helmValuesFile", property = "tkit.docs.file.helm.values", defaultValue = "src/main/helm/values.yaml")
     protected String helmValuesFile;
 
-    @Parameter(name = "indexIncludeFile", property = "tkit.docs.indexIncludeFile", defaultValue = "docs.adoc")
-    protected String indexIncludeFile;
+    @Parameter(name = "quarkusConfigDir", property = "tkit.docs.quarkus.config.dir", defaultValue = "${project.build.directory}/asciidoc/generated/config")
+    protected File quarkusConfigDir;
 
-    @Parameter(name = "indexIncludeConfigFile", property = "tkit.docs.indexIncludeConfigFile", defaultValue = "true")
-    protected boolean indexIncludeConfigFile;
+    @Parameter(name = "quarkusConfigFile", property = "tkit.docs.quarkus.config.file", defaultValue = "${project.artifactId}.adoc")
+    protected String quarkusConfigFile;
 
-    @Parameter(name = "copyConfigDir", property = "tkit.docs.copyConfigDir", defaultValue = "${project.build.directory}/asciidoc/generated/config")
-    protected File copyConfigDir;
+    @Parameter(name = "skipCopyQuarkusConfigFile", property = "tkit.docs.quarkus.config.copy.skip", defaultValue = "false")
+    protected boolean skipCopyQuarkusConfigFile;
 
-    @Parameter(name = "skipCopyConfigFile", property = "tkit.docs.skipCopyConfigFile", defaultValue = "false")
-    protected boolean skipCopyConfigFile;
+    @Parameter(name = "extensions", property = "tkit.docs.generate.extensions", defaultValue = "true")
+    protected boolean extensions;
+
+    @Parameter(name = "extensionsFile", property = "tkit.docs.generate.extensions.file", defaultValue = "${project.artifactId}-extensions.adoc")
+    protected String extensionsFile;
+
+    @Parameter(name = "properties", property = "tkit.docs.generate.properties", defaultValue = "true")
+    protected boolean properties;
+
+    @Parameter(name = "attributes", property = "tkit.docs.generate.attributes", defaultValue = "true")
+    protected boolean attributes;
+
+    @Parameter(name = "attributesFile", property = "tkit.docs.generate.attributes.file", defaultValue = "${project.artifactId}-attributes.adoc")
+    protected String attributesFile;
+
+    @Parameter(name = "helm", property = "tkit.docs.generate.helm", defaultValue = "true")
+    protected boolean helm;
+
+    @Parameter(name = "docker", property = "tkit.docs.generate.docker", defaultValue = "true")
+    protected boolean docker;
+
+    @Parameter(name = "docs", property = "tkit.docs.generate.docs", defaultValue = "true")
+    protected boolean docs;
+
+    @Parameter(name = "index", property = "tkit.docs.generate.index", defaultValue = "true")
+    protected boolean index;
+
+    @Parameter(name = "indexHeaderFile", property = "tkit.docs.index.header", defaultValue = "docs.adoc")
+    protected String indexHeaderFile;
+
+    @Parameter(name = "indexIncludeHeader", property = "tkit.docs.index.include.header", defaultValue = "true")
+    protected boolean indexIncludeHeader;
+
+    @Parameter(name = "indexIncludeDocs", property = "tkit.docs.index.include.docs", defaultValue = "true")
+    protected boolean indexIncludeDocs;
+
+    @Parameter(name = "indexDocsFile", property = "tkit.docs.index.include.docs", defaultValue = "${project.artifactId}-docs.adoc")
+    protected String indexDocsFile;
+
+    @Parameter(name = "indexIncludeConfig", property = "tkit.docs.index.include.config", defaultValue = "true")
+    protected boolean indexIncludeConfig;
+
+
 
     @Override
     public void execute() throws MojoExecutionException {
 
         if (skipDocs) {
-            getLog().info("tkit quarkus documentation plugin is disabled");
+            getLog().info("1000kit quarkus documentation plugin is disabled");
             return;
         }
 
-        if ("pom".equals(getProject().getPackaging())) {
-            getLog().debug("tkit quarkus documentation plugin is disabled for pom packaging");
+        if (excludePackages.contains(getProject().getPackaging())) {
+            getLog().debug("1000kit quarkus documentation plugin is disabled for " + getProject().getPackaging() + " packaging");
             return;
         }
+
+        // copy quarkus generated files
+        File configFile = null;
+        if (indexIncludeConfig) {
+            configFile = copyConfigFile();
+        }
+
+        var config = getConfiguration(configFile != null);
+
+
+        var container = Container.create(getProject(), config);
 
         var engine = EngineFactory.createEngine();
-
-        var docsContainer = DocsContainer.create(getProject(), generateVersion, generateProperties, generateExtensions, generateDocker, generateHelm);
-
-        var containerVersion = VersionContainer.create(getProject(), "0.0.0-rc.%s", "%s-rc.%s");
-
-        renderTemplate(engine, containerVersion, "attributes.qute", "-attributes.adoc");
-
-        if (docsContainer.isGenerateVersion()) {
-            renderTemplate(engine, containerVersion, "version.qute", "-version.adoc");
+        if (config.isAttributes()) {
+            renderTemplate(engine, container, "attributes.qute", config.getAttributesFile());
         }
-
-        if (docsContainer.isGenerateExtensions()) {
-            var containerExtensions = createExtensions();
-            renderTemplate(engine, containerExtensions, "extensions.qute", "-extensions.adoc");
+        if (config.isDocs()) {
+            renderTemplate(engine, container, "docs.qute", config.getIndexDocsFile());
         }
-
-        if (docsContainer.isGenerateProperties()) {
-            var containerProperties = PropertiesContainer.createContainer(propertiesFile);
-            renderTemplate(engine, containerProperties, "properties.qute", "-properties.adoc");
+        if (config.isExtensions()) {
+            renderTemplate(engine, container, "extensions.qute", config.getExtensionsFile());
         }
-
-        if (docsContainer.isGenerateDocker()) {
-            var dockerContainer = DockerContainer.create(containerVersion, getProject(), dockerRegistry);
-            renderTemplate(engine, dockerContainer, "docker.qute", "-docker.adoc");
-        }
-
-        if (docsContainer.isGenerateHelm()) {
-            var helmContainer = HelmContainer.create(containerVersion, getProject(), helmRegistry, helmValuesFile);
-            renderTemplate(engine, helmContainer, "helm.qute", "-helm.adoc");
-        }
-
-        if (generateDocs) {
-            renderTemplate(engine, docsContainer, "docs.qute", "-docs.adoc");
-        }
-
-        // copy other generated files
-        var configFile = copyConfigFile();
 
         // generated index
-        if (generateIndex) {
-
-
-            if (indexIncludeConfigFile) {
-                if (configFile == null) {
-                    getLog().warn("Skip include config file in the index page. Generated config file does not exists.");
-                }
-            } else {
-                getLog().warn("Skip include config file in the index page.");
-                configFile = null;
-            }
-
-            var container = IndexContainer.create(getProject(), indexIncludeFile, configFile);
-            Template tmp = engine.getTemplate("index.qute");
-            writeToFile(tmp.data(TEMPLATE_CONTAINER, container).render(), "index.adoc");
+        if (config.isIndex()) {
+            renderTemplate(engine, container, "index.qute", "index.adoc");
         }
 
     }
 
-    private void renderTemplate(Engine engine, Object container, String template, String outputSuffix) throws MojoExecutionException {
+    private Configuration getConfiguration(boolean indexConfig) {
+        var config = new Configuration();
+        config.setIndexDocsFile(indexDocsFile);
+        config.setAttributesFile(attributesFile);
+        config.setExtensionsFile(extensionsFile);
+        config.setDocker(docker);
+        config.setExtensions(extensions);
+        config.setProperties(properties);
+        config.setHelm(helm);
+        config.setIndex(index);
+        config.setDocs(docs);
+        config.setAttributes(attributes);
+        config.setHelmValuesFile(helmValuesFile);
+        config.setPropertiesFile(propertiesFile);
+        config.setIndexDocs(indexIncludeDocs);
+        config.setIndexConfig(indexConfig);
+        config.setIndexHeader(indexIncludeHeader);
+        config.setIndexHeaderFile(indexHeaderFile);
+        config.setIndexConfigFile(quarkusConfigFile);
+        config.setDependenciesExcludeScopes(dependenciesExcludeScopes);
+        config.setDependenciesMappingFile(dependenciesMappingFile);
+        config.setDependenciesIncludeGroups(dependenciesIncludeGroups);
+        return config;
+    }
+
+
+    private void renderTemplate(Engine engine, Object container, String template, String name) throws MojoExecutionException {
         Template tmp = engine.getTemplate(template);
-        writeToSuffixFile(tmp.data(TEMPLATE_CONTAINER, container).render(), outputSuffix);
+        writeToFile(tmp.data(TEMPLATE_CONTAINER, container).render(), name);
     }
 
 
-    private ExtensionContainer createExtensions()  {
-        // filter all project dependencies
-        var project = getProject();
+    private File copyConfigFile() {
 
-        var dependencies = project.getDependencies().stream()
-                .filter(x -> !excludeScopes.contains(x.getScope()))
-                .filter(x -> includeGroups.stream().anyMatch(f -> x.getGroupId().startsWith(f)))
-                .toList();
-
-
-        var mapping = new Mapping(mappingFile);
-
-
-        var container = new ExtensionContainer();
-
-        for (Dependency dep : dependencies) {
-
-            if (mapping.isUnknown(dep)) {
-                container.addUnknowns(Extension.of(dep));
-                continue;
-            }
-
-            if (!mapping.isEnabled(dep)) {
-                continue;
-            }
-
-            var docUrl = mapping.docLink(dep);
-            var configUrl = mapping.configLink(dep);
-            container.addExtension(Extension.of(dep, docUrl, configUrl));
-        }
-
-        return container;
-    }
-
-
-    private String copyConfigFile() {
-
-        if (skipCopyConfigFile) {
+        if (skipCopyQuarkusConfigFile) {
             getLog().info("Copy configuration file is disabled");
             return null;
         }
 
-        if (!copyConfigDir.exists()) {
-            getLog().warn("Config file directory does not exists. Dir: " + copyConfigDir);
-            return null;
-        }
+        Path from = quarkusConfigDir.toPath().resolve(quarkusConfigFile);
 
-        return copyFile(copyConfigDir, getProject().getArtifactId() + ".adoc");
-    }
-
-    private String copyFile(File dir, String file) {
-        Path from = dir.toPath().resolve(file);
         if (!from.toFile().exists()) {
-            getLog().warn("Copy config file does not exists. File: " + from);
+            getLog().warn("Config file does not exists. File: " + quarkusConfigFile);
             return null;
         }
+
+        var to = Paths.get(outputDir, quarkusConfigFile);
+
         try {
-            var to = Paths.get(outputDir, file);
+
             Files.copy(from, to, REPLACE_EXISTING);
             getLog().info("Copy config file to: " + to);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
 
-        return file;
+        return to.toFile();
     }
+
 }

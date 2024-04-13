@@ -1,2 +1,5 @@
-:project-rc-version: {container.lastRcVersion}
-:project-version: {container.lastReleaseVersion}
+
+:docker-registry: https://github.com/onecx/{container.project.artifactId}/pkgs/container/{container.project.artifactId}
+:helm-registry: https://github.com/onecx/{container.project.artifactId}/pkgs/container/charts%2F{container.project.artifactId}
+:properties-file: {container.config.propertiesFile}
+:helm-file: {container.config.helmValuesFile}

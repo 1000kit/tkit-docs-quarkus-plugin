@@ -1,4 +1,6 @@
 
+include::{container.config.attributesFile}[opts=optional]
+
 [.extension.table.searchable, cols="50,.^15,.^15,.^20"]
 |===
 h| Extensions
@@ -6,7 +8,7 @@ h| Documentation
 h| Configuration
 h| Version
 
-{#for extension in container.extensions}
+{#for extension in container.extensions.extensions}
 | {extension.dependency.artifactId}
 
 | {#if extension.isDocUrl}{extension.docUrl}[Link]{/if}
@@ -15,7 +17,7 @@ h| Version
 
 {/for}
 
-{#for extension in container.unknowns}
+{#for extension in container.extensions.unknowns}
 | {extension.dependency.artifactId}
 
 | {#if extension.isDocUrl}{extension.docUrl}[Link]{/if}
