@@ -14,4 +14,3 @@ include::{container.config.indexConfigFile}[opts=optional]
 {#if container.config.indexDocs}
 include::{container.config.indexDocsFile}[opts=optional]
 {/if}
-

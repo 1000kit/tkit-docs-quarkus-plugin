@@ -19,7 +19,7 @@ include::{container.config.attributesFile}[opts=optional]
 
 include::{container.config.extensionsFile}[opts=optional]
 {/if}
-S
+
 {#if container.config.isDocker}
 === Container
 
