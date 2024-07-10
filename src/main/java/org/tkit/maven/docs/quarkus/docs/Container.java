@@ -28,7 +28,6 @@ public class Container {
         if (config.isProperties()) {
             g.properties = PropertiesContainer.create(config.getPropertiesFile());
         }
-
         return g;
     }
 
@@ -43,8 +42,7 @@ public class Container {
     public HelmContainer getHelm() {
         return helm;
     }
-
-
+    
     public MavenProject getProject() {
         return project;
     }
