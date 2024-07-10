@@ -27,6 +27,7 @@ public class Configuration {
     private List<String> dependenciesExcludeScopes;
     private String dependenciesMappingFile;
     private String currentOpenApiFile;
+    private String openApiBasePath;
 
     public String getExtensionsFile() {
         return extensionsFile;
@@ -208,5 +209,12 @@ public class Configuration {
     }
     public String getCurrentOpenApiFile() {
         return currentOpenApiFile;
+    }
+
+    public void setOpenApiBasePath(String openApiBasePath) {
+        this.openApiBasePath = openApiBasePath;
+    }
+    public String getOpenApiBasePath() {
+        return openApiBasePath;
     }
 }

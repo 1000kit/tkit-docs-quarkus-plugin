@@ -99,7 +99,7 @@ public class DocumentationMojo extends AbstractDocsMojo {
     @Parameter(name = "openApiFiles", property = "tkit.docs.generate.openApi.file")
     protected String[] openApiFiles;
 
-    @Parameter(name = "openApiBasePath", property = "tkit.docs.generate.openApi.path", defaultValue = "src/main/openapi/")
+    @Parameter(name = "openApiBasePath", property = "tkit.docs.generate.openApi.path", defaultValue = "main/src/main/openapi")
     protected String openApiBasePath;
 
     @Parameter(name = "openApi", property = "tkit.docs.generate.openApi", defaultValue = "true")
@@ -181,6 +181,7 @@ public class DocumentationMojo extends AbstractDocsMojo {
         config.setDependenciesExcludeScopes(dependenciesExcludeScopes);
         config.setDependenciesMappingFile(dependenciesMappingFile);
         config.setDependenciesIncludeGroups(dependenciesIncludeGroups);
+        config.setOpenApiBasePath(openApiBasePath);
         return config;
     }
 
