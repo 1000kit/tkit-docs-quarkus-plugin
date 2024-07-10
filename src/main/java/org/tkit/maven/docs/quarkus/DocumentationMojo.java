@@ -96,11 +96,18 @@ public class DocumentationMojo extends AbstractDocsMojo {
     @Parameter(name = "indexIncludeConfig", property = "tkit.docs.index.include.config", defaultValue = "true")
     protected boolean indexIncludeConfig;
 
+    @Parameter(name = "openApiFiles", property = "tkit.docs.generate.openApi.file")
+    protected String[] openApiFiles;
+
+    @Parameter(name = "openApiBasePath", property = "tkit.docs.generate.openApi.path", defaultValue = "src/main/openapi/")
+    protected String openApiBasePath;
+
+    @Parameter(name = "openApi", property = "tkit.docs.generate.openApi", defaultValue = "true")
+    protected boolean openApi;
 
 
     @Override
     public void execute() throws MojoExecutionException {
-
         if (skipDocs) {
             getLog().info("1000kit quarkus documentation plugin is disabled");
             return;
@@ -132,6 +139,16 @@ public class DocumentationMojo extends AbstractDocsMojo {
         if (config.isExtensions()) {
             renderTemplate(engine, container, "extensions.qute", config.getExtensionsFile());
         }
+        if(config.isOpenApi()) {
+            for(int i=0; config.getOpenApiFiles().length > i; i++) {
+                try {
+                    config.setCurrentOpenApiFile(config.getOpenApiFiles()[i]);
+                    renderTemplate(engine, container, "openApi.qute", config.getCurrentOpenApiFile().substring(0, config.getCurrentOpenApiFile().lastIndexOf('.')) + ".adoc", "/openapi");
+                } catch (MojoExecutionException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
 
         // generated index
         if (config.isIndex()) {
@@ -145,11 +162,13 @@ public class DocumentationMojo extends AbstractDocsMojo {
         config.setIndexDocsFile(indexDocsFile);
         config.setAttributesFile(attributesFile);
         config.setExtensionsFile(extensionsFile);
+        config.setOpenApiFiles(openApiFiles);
         config.setDocker(docker);
         config.setExtensions(extensions);
         config.setProperties(properties);
         config.setHelm(helm);
         config.setIndex(index);
+        config.setOpenApi(openApi);
         config.setDocs(docs);
         config.setAttributes(attributes);
         config.setHelmValuesFile(helmValuesFile);
@@ -170,6 +189,11 @@ public class DocumentationMojo extends AbstractDocsMojo {
         Template tmp = engine.getTemplate(template);
         writeToFile(tmp.data(TEMPLATE_CONTAINER, container).render(), name);
     }
+    private void renderTemplate(Engine engine, Object container, String template, String name, String subDir) throws MojoExecutionException {
+        Template tmp = engine.getTemplate(template);
+        writeToFile(tmp.data(TEMPLATE_CONTAINER, container).render(), name, subDir);
+    }
+
 
 
     private File copyConfigFile() {
