@@ -42,7 +42,7 @@ public class Container {
     public HelmContainer getHelm() {
         return helm;
     }
-    
+
     public MavenProject getProject() {
         return project;
     }
