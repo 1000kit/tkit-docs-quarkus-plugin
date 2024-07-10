@@ -22,10 +22,11 @@ public class Configuration {
     private String indexHeaderFile;
     private String helmValuesFile;
     private String propertiesFile;
-    private String openApiFile;
+    private String[] openApiFiles;
     private List<String> dependenciesIncludeGroups;
     private List<String> dependenciesExcludeScopes;
     private String dependenciesMappingFile;
+    private String currentOpenApiFile;
 
     public String getExtensionsFile() {
         return extensionsFile;
@@ -187,8 +188,8 @@ public class Configuration {
         this.propertiesFile = propertiesFile;
     }
 
-    public String getOpenApiFile() {
-        return openApiFile;
+    public String[] getOpenApiFiles() {
+        return openApiFiles;
     }
     public boolean isOpenApi() {
         return openApi;
@@ -198,8 +199,14 @@ public class Configuration {
         this.openApi = openApi;
     }
 
-    public void setOpenApiFile(String openApiFile) {
-        this.openApiFile = openApiFile;
+    public void setOpenApiFiles(String[] openApiFiles) {
+        this.openApiFiles = openApiFiles;
     }
 
+    public void setCurrentOpenApiFile(String openApiFile) {
+        this.currentOpenApiFile = openApiFile;
+    }
+    public String getCurrentOpenApiFile() {
+        return currentOpenApiFile;
+    }
 }

@@ -96,8 +96,11 @@ public class DocumentationMojo extends AbstractDocsMojo {
     @Parameter(name = "indexIncludeConfig", property = "tkit.docs.index.include.config", defaultValue = "true")
     protected boolean indexIncludeConfig;
 
-    @Parameter(name = "openApiFile", property = "tkit.docs.generate.openApi.file", defaultValue = "src/main/openapi/onecx-help-v1-openapi.yaml")
-    protected String openApiFile;
+    @Parameter(name = "openApiFiles", property = "tkit.docs.generate.openApi.file")
+    protected String[] openApiFiles;
+
+    @Parameter(name = "openApiBasePath", property = "tkit.docs.generate.openApi.path", defaultValue = "src/main/openapi/")
+    protected String openApiBasePath;
 
     @Parameter(name = "openApi", property = "tkit.docs.generate.openApi", defaultValue = "true")
     protected boolean openApi;
@@ -105,7 +108,6 @@ public class DocumentationMojo extends AbstractDocsMojo {
 
     @Override
     public void execute() throws MojoExecutionException {
-        System.out.println("MYLOG: execute");
         if (skipDocs) {
             getLog().info("1000kit quarkus documentation plugin is disabled");
             return;
@@ -129,24 +131,23 @@ public class DocumentationMojo extends AbstractDocsMojo {
 
         var engine = EngineFactory.createEngine();
         if (config.isAttributes()) {
-            System.out.println("MYLOG: IS ATTRIBUTE IN MOJO?");
-
             renderTemplate(engine, container, "attributes.qute", config.getAttributesFile());
         }
         if (config.isDocs()) {
-            System.out.println("MYLOG: IS DOCS IN MOJO?");
-
             renderTemplate(engine, container, "docs.qute", config.getIndexDocsFile());
         }
         if (config.isExtensions()) {
-            System.out.println("MYLOG: IS EXENSTION IN MOJO?");
-
             renderTemplate(engine, container, "extensions.qute", config.getExtensionsFile());
         }
         if(config.isOpenApi()) {
-            System.out.println("MYLOG: IS OPEN API IN MOJO?");
-
-            renderTemplate(engine, container, "openApi.qute", "openApi.adoc");
+            for(int i=0; config.getOpenApiFiles().length > i; i++) {
+                try {
+                    config.setCurrentOpenApiFile(config.getOpenApiFiles()[i]);
+                    renderTemplate(engine, container, "openApi.qute", config.getCurrentOpenApiFile().substring(0, config.getCurrentOpenApiFile().lastIndexOf('.')) + ".adoc", "/openapi");
+                } catch (MojoExecutionException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
 
         // generated index
@@ -161,7 +162,7 @@ public class DocumentationMojo extends AbstractDocsMojo {
         config.setIndexDocsFile(indexDocsFile);
         config.setAttributesFile(attributesFile);
         config.setExtensionsFile(extensionsFile);
-        config.setOpenApiFile(openApiFile);
+        config.setOpenApiFiles(openApiFiles);
         config.setDocker(docker);
         config.setExtensions(extensions);
         config.setProperties(properties);
@@ -188,6 +189,11 @@ public class DocumentationMojo extends AbstractDocsMojo {
         Template tmp = engine.getTemplate(template);
         writeToFile(tmp.data(TEMPLATE_CONTAINER, container).render(), name);
     }
+    private void renderTemplate(Engine engine, Object container, String template, String name, String subDir) throws MojoExecutionException {
+        Template tmp = engine.getTemplate(template);
+        writeToFile(tmp.data(TEMPLATE_CONTAINER, container).render(), name, subDir);
+    }
+
 
 
     private File copyConfigFile() {

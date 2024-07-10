@@ -30,6 +30,10 @@ public abstract class AbstractDocsMojo extends AbstractMojo {
         Path out1 = getOutputFile(file);
         writeTo(out1, data);
     }
+    protected void writeToFile(String data, String file, String subDir) throws MojoExecutionException {
+        Path out1 = getOutputFile(file, subDir);
+        writeTo(out1, data);
+    }
 
     protected void writeTo(Path out1, String data) throws MojoExecutionException {
         try {
@@ -49,9 +53,26 @@ public abstract class AbstractDocsMojo extends AbstractMojo {
         Path dir = getOutputDir();
         return dir.resolve(name);
     }
+    protected Path getOutputFile(String name, String subDir) {
+        Path dir = getOutputDir(subDir);
+        return dir.resolve(name);
+    }
 
     protected Path getOutputDir() {
         Path parent = Paths.get(outputDir);
+        File dir = parent.toFile();
+
+        if (!dir.exists()) {
+            var r = dir.mkdirs();
+            if (r) {
+                getLog().debug("Create output directory " + outputDir);
+            }
+        }
+        return parent;
+    }
+
+    protected Path getOutputDir(String subDir) {
+        Path parent = Paths.get(outputDir + subDir);
         File dir = parent.toFile();
 
         if (!dir.exists()) {
