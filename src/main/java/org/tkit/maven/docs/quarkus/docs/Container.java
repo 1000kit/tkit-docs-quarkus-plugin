@@ -11,6 +11,8 @@ public class Container {
 
     private HelmContainer helm;
 
+    private OpenApiContainer openApi;
+
     private PropertiesContainer properties;
 
     private ExtensionContainer extensions;
@@ -28,6 +30,12 @@ public class Container {
         if (config.isProperties()) {
             g.properties = PropertiesContainer.create(config.getPropertiesFile());
         }
+        System.out.println("MYLOG: IS OPEN API?");
+
+        if(config.isOpenApi()) {
+            System.out.println("MYLOG: YES");
+            g.openApi = OpenApiContainer.create(config.getOpenApiFile());
+        }
         return g;
     }
 
@@ -42,6 +50,8 @@ public class Container {
     public HelmContainer getHelm() {
         return helm;
     }
+
+    public OpenApiContainer getOpenApi(){return openApi;}
 
     public MavenProject getProject() {
         return project;

@@ -96,11 +96,16 @@ public class DocumentationMojo extends AbstractDocsMojo {
     @Parameter(name = "indexIncludeConfig", property = "tkit.docs.index.include.config", defaultValue = "true")
     protected boolean indexIncludeConfig;
 
+    @Parameter(name = "openApiFile", property = "tkit.docs.generate.openApi.file", defaultValue = "src/main/openapi/onecx-help-v1-openapi.yaml")
+    protected String openApiFile;
+
+    @Parameter(name = "openApi", property = "tkit.docs.generate.openApi", defaultValue = "true")
+    protected boolean openApi;
 
 
     @Override
     public void execute() throws MojoExecutionException {
-
+        System.out.println("MYLOG: execute");
         if (skipDocs) {
             getLog().info("1000kit quarkus documentation plugin is disabled");
             return;
@@ -124,13 +129,24 @@ public class DocumentationMojo extends AbstractDocsMojo {
 
         var engine = EngineFactory.createEngine();
         if (config.isAttributes()) {
+            System.out.println("MYLOG: IS ATTRIBUTE IN MOJO?");
+
             renderTemplate(engine, container, "attributes.qute", config.getAttributesFile());
         }
         if (config.isDocs()) {
+            System.out.println("MYLOG: IS DOCS IN MOJO?");
+
             renderTemplate(engine, container, "docs.qute", config.getIndexDocsFile());
         }
         if (config.isExtensions()) {
+            System.out.println("MYLOG: IS EXENSTION IN MOJO?");
+
             renderTemplate(engine, container, "extensions.qute", config.getExtensionsFile());
+        }
+        if(config.isOpenApi()) {
+            System.out.println("MYLOG: IS OPEN API IN MOJO?");
+
+            renderTemplate(engine, container, "openApi.qute", "openApi.adoc");
         }
 
         // generated index
@@ -145,11 +161,13 @@ public class DocumentationMojo extends AbstractDocsMojo {
         config.setIndexDocsFile(indexDocsFile);
         config.setAttributesFile(attributesFile);
         config.setExtensionsFile(extensionsFile);
+        config.setOpenApiFile(openApiFile);
         config.setDocker(docker);
         config.setExtensions(extensions);
         config.setProperties(properties);
         config.setHelm(helm);
         config.setIndex(index);
+        config.setOpenApi(openApi);
         config.setDocs(docs);
         config.setAttributes(attributes);
         config.setHelmValuesFile(helmValuesFile);

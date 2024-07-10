@@ -10,6 +10,7 @@ public class HelmContainer {
     public static HelmContainer create(String helmValuesFile) {
         String values;
         try {
+            System.out.println(Path.of(helmValuesFile));
             values = Files.readString(Path.of(helmValuesFile));
         } catch (Exception ex) {
             throw new RuntimeException(ex);

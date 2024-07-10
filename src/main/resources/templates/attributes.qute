@@ -3,3 +3,4 @@
 :helm-registry: https://github.com/onecx/{container.project.artifactId}/pkgs/container/charts%2F{container.project.artifactId}
 :properties-file: {container.config.propertiesFile}
 :helm-file: {container.config.helmValuesFile}
+:openApi-file: {container.config.openApiFile}

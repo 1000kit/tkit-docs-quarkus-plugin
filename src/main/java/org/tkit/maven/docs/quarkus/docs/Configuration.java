@@ -12,6 +12,7 @@ public class Configuration {
     private boolean helm;
     private boolean index;
     private boolean docs;
+    private boolean openApi;
     private boolean attributes;
     private boolean indexConfig;
     private boolean indexHeader;
@@ -21,6 +22,7 @@ public class Configuration {
     private String indexHeaderFile;
     private String helmValuesFile;
     private String propertiesFile;
+    private String openApiFile;
     private List<String> dependenciesIncludeGroups;
     private List<String> dependenciesExcludeScopes;
     private String dependenciesMappingFile;
@@ -184,4 +186,20 @@ public class Configuration {
     public void setPropertiesFile(String propertiesFile) {
         this.propertiesFile = propertiesFile;
     }
+
+    public String getOpenApiFile() {
+        return openApiFile;
+    }
+    public boolean isOpenApi() {
+        return openApi;
+    }
+
+    public void setOpenApi(boolean openApi) {
+        this.openApi = openApi;
+    }
+
+    public void setOpenApiFile(String openApiFile) {
+        this.openApiFile = openApiFile;
+    }
+
 }
