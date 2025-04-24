@@ -6,6 +6,12 @@
 [![Maven Central](https://img.shields.io/maven-central/v/org.tkit.maven/tkit-docs-quarkus-plugin?logo=java&style=for-the-badge)](https://maven-badges.herokuapp.com/maven-central/org.tkit.maven/tkit-docs-quarkus-plugin)
 [![GitHub Actions Status](https://img.shields.io/github/actions/workflow/status/1000kit/tkit-docs-quarkus-plugin/build.yml?logo=GitHub&style=for-the-badge)](https://github.com/1000kit/tkit-docs-quarkus-plugin/actions/workflows/build.yml)
 
+## Version
+
+Branches:
+* [main](https://github.com/1000kit/tkit-docs-quarkus-plugin/tree/main) - Quarkus latest version
+* [1.x](https://github.com/1000kit/tkit-docs-quarkus-plugin/tree/1.x) - Quarkus 3.20 LTS
+
 ### Maven configuration
 
 Create a documentation in your maven project.
