@@ -58,7 +58,7 @@
         <maven.maven-core.version>3.9.11</maven.maven-core.version>
 
         <!-- other -->
-        <quarkus.version>3.27.0</quarkus.version>
+        <quarkus.version>3.28.1</quarkus.version>
     </properties>
 
 
