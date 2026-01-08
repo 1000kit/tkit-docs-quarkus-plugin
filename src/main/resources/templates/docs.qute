@@ -1,11 +1,15 @@
 
 include::{container.config.attributesFile}[opts=optional]
 
+{#if container.config.isDocker}
+\{docker-registry}[Link to Docker registry]
+{/if}
+
 {#if container.config.isProperties}
-=== Default properties
+== Default properties
 
 .\{properties-file}
-[%collapsible%open]
+[%collapsible]
 ====
 [source,properties,subs=attributes+]
 ----
@@ -15,29 +19,22 @@ include::{container.config.attributesFile}[opts=optional]
 {/if}
 
 {#if container.config.isExtensions}
-=== Extensions
-
+== Extensions
+.Extensions List
+[%collapsible]
+====
 include::{container.config.extensionsFile}[opts=optional]
-{/if}
-
-{#if container.config.isDocker}
-=== Container
-
-\{docker-registry}[Docker registry]
-
+====
 {/if}
 
 {#if container.config.isHelm}
-=== Helm
+== Helm
 
-\{helm-registry}[Helm registry]
+\{helm-registry}[Link to Helm registry]
 
-Default values
-
-.\{helm-file}
+.Default values in \{helm-file}
 [source,yaml]
 ----
 {container.helm.values}
 ----
-
 {/if}

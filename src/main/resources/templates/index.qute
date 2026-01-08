@@ -1,13 +1,13 @@
 include::{container.config.attributesFile}[opts=optional]
 
-== {container.project.name}
+= {container.project.name}
 
 {#if container.config.indexHeader}
 include::{container.config.indexHeaderFile}[opts=optional]
 {/if}
 
 {#if container.config.indexConfig}
-=== Configuration
+== Configuration
 include::{container.config.indexConfigFile}[opts=optional]
 {/if}
 

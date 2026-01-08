@@ -37,8 +37,13 @@ public abstract class AbstractDocsMojo extends AbstractMojo {
 
     protected void writeTo(Path out1, String data) throws MojoExecutionException {
         try {
-            Files.writeString(out1, data,  StandardOpenOption.CREATE);
-            getLog().info("Generate documentation file: " + out1);
+            if(Files.exists(out1)) {
+                Files.writeString(out1, data,  StandardOpenOption.TRUNCATE_EXISTING);
+                getLog().info("Update documentation file: " + out1);
+            } else {
+                Files.writeString(out1, data,  StandardOpenOption.CREATE);
+                getLog().info("Generate documentation file: " + out1);
+            }
         } catch (Exception ex) {
             getLog().error("Error generate documentation file: " + out1, ex);
             throw new MojoExecutionException(ex);
