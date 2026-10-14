@@ -10,9 +10,10 @@
 
 Branches:
 * [main](https://github.com/1000kit/tkit-docs-quarkus-plugin/tree/main) - Quarkus latest version
-* [3.x](https://github.com/1000kit/tkit-docs-quarkus-plugin/tree/3.x) - Quarkus 3.33 LTS
-* [2.x](https://github.com/1000kit/tkit-docs-quarkus-plugin/tree/2.x) - Quarkus 3.27 LTS
-* [1.x](https://github.com/1000kit/tkit-docs-quarkus-plugin/tree/1.x) - Quarkus 3.20 LTS
+* [4.x](https://github.com/1000kit/tkit-docs-quarkus-plugin/tree/4.x) - Quarkus 3.40 LTS
+* [3.x](https://github.com/1000kit/tkit-docs-quarkus-plugin/tree/3.x) - Quarkus 3.33 LTS (deprecated)
+* [2.x](https://github.com/1000kit/tkit-docs-quarkus-plugin/tree/2.x) - Quarkus 3.27 LTS (archived)
+* [1.x](https://github.com/1000kit/tkit-docs-quarkus-plugin/tree/1.x) - Quarkus 3.20 LTS (archived)
 
 ### Maven configuration
 
